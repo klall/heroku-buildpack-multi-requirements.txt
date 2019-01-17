@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+indent() {
+    sed -u 's/^/      /'
+}
+
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+
+REQUIREMENTS_TXT=$(cat ${ENV_DIR}/REQUIREMENTS_TXT)
+
+if [[ -z "${REQUIREMENTS_TXT}" ]]; then
+    echo "REQUIREMENTS_TXT not set. using default one in root directory" | indent
+    exit 0
+fi
+
+cp ${BUILD_DIR}/${REQUIREMENTS_TXT} ${BUILD_DIR}/requirements.txt
+
+if ! [ $? ]; then
+    echo "FAILED to copy a requirements.txt" | indent
+    exit 1
+fi
+
+echo "Copied ${REQUIREMENTS_TXT} as requirements.txt successfully" | indent
